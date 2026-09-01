@@ -29,9 +29,9 @@ export function AuthScreen() {
   function studentSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (tab === "signup") {
-      if (!sName.trim() || !sEmail.trim()) return toast.error("Name and email are required.");
-      if (sPass.length < 6) return toast.error("Password must be at least 6 characters.");
-      if (sPass !== sConfirm) return toast.error("Passwords do not match.");
+      if (!sName.trim() || !sEmail.trim()) { toast.error("Name and email are required."); return; }
+      if (sPass.length < 6) { toast.error("Password must be at least 6 characters."); return; }
+      if (sPass !== sConfirm) { toast.error("Passwords do not match."); return; }
       upsertStudent({
         name: sName.trim(),
         email: sEmail.trim(),
@@ -45,7 +45,7 @@ export function AuthScreen() {
       return;
     }
     const existing = students.find((s) => s.email.toLowerCase() === sEmail.trim().toLowerCase());
-    if (!existing) return toast.error("No student found with that email. Try signing up.");
+    if (!existing) { toast.error("No student found with that email. Try signing up."); return; }
     setCurrentStudent(existing.id);
     toast.success(`Welcome back, ${existing.name}!`);
     reset("student", "screen-profile");
@@ -53,7 +53,7 @@ export function AuthScreen() {
 
   function recruiterSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!otpVerified) return toast.error("Verify the OTP sent to your mobile first.");
+    if (!otpVerified) { toast.error("Verify the OTP sent to your mobile first."); return; }
     toast.success("Recruiter session started.");
     reset("recruiter", "screen-recruiter-home");
   }
@@ -198,8 +198,10 @@ export function AuthScreen() {
                   variant="outline"
                   className="shrink-0"
                   onClick={() => {
-                    if (rMobile.replace(/\D/g, "").length < 10)
-                      return toast.error("Enter a valid 10-digit mobile number.");
+                    if (rMobile.replace(/\D/g, "").length < 10) {
+                      toast.error("Enter a valid 10-digit mobile number.");
+                      return;
+                    }
                     setOtpSent(true);
                     setOtpVerified(false);
                     toast.success("OTP sent (demo code: 1234)");
