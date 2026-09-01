@@ -26,7 +26,7 @@ export type Student = {
   id: string;
   name: string;
   email: string;
-  mobile?: string;
+  mobile?: string | undefined;
   degree: string;
   gradYear: string;
   skills: string[];
@@ -37,8 +37,8 @@ export type Job = {
   company: string;
   role: string;
   required: string[];
-  stipend?: string;
-  location?: string;
+  stipend?: string | undefined;
+  location?: string | undefined;
 };
 
 export type OfferStatus = "pending" | "accepted" | "declined";
@@ -132,7 +132,7 @@ const MOCK_JOBS: Job[] = [
 ];
 
 export function matchScore(studentSkills: string[], required: string[]) {
-  if (required.length === 0) return 0;
+  if (required.length === 0) return { percent: 0, matched: [], missing: [] };
   const matched = required.filter((r) => studentSkills.includes(r));
   return {
     percent: Math.round((matched.length / required.length) * 100),
@@ -171,7 +171,7 @@ type Ctx = State & {
   back: () => void;
   reset: (role: Role, screen: Screen) => void;
   logout: () => void;
-  upsertStudent: (s: Omit<Student, "id"> & { id?: string }) => Student;
+  upsertStudent: (s: Omit<Student, "id"> & { id?: string | undefined }) => Student;
   setCurrentStudent: (id: string) => void;
   addJob: (j: Omit<Job, "id">) => void;
   apply: (jobId: string) => void;
